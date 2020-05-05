@@ -496,7 +496,7 @@
 <h2 id="多项式时间复杂度"><a href="#多项式时间复杂度" class="headerlink" title="多项式时间复杂度"></a>多项式时间复杂度</h2><h3 id="O-1"><a href="#O-1" class="headerlink" title="O(1)"></a>O(1)</h3><p>O(1)不是代表我们只运行一次，它是常量级时间复杂度的一种表示方法<br>比如下面这段代码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">int j = 0;</span><br><span class="line">int sum = i + j + 100 + 20;</span><br></pre></td></tr></table></figure>
 <p>它的时间复杂度是O(1)<br>只要代码的执行时间不会随着n的增大而增大，这样代码的时间复杂度我们都记作O(1)</p>
-<h3 id="O-logn-O-nlogn"><a href="#O-logn-O-nlogn" class="headerlink" title="O(logn)/O(nlogn)"></a>O(logn)/O(nlogn)</h3><p>对数阶时间复杂度非常常见，同时也是最难菲尼的一种时间复杂度<br>举个例子</p>
+<h3 id="O-logn-O-nlogn"><a href="#O-logn-O-nlogn" class="headerlink" title="O(logn)/O(nlogn)"></a>O(logn)/O(nlogn)</h3><p>对数阶时间复杂度非常常见，同时也是最难区别的一种时间复杂度<br>举个例子</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i = 1；</span><br><span class="line"><span class="keyword">while</span>(i &lt;= n)</span><br><span class="line">&#123;</span><br><span class="line">    i *= 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>根据上面说的复杂度方法，while循环执行的次数是最多的，所以我们要得到时间复杂度，我们只需要计算出这几行代码一共执行了多少次就可以了。</p>
 <p>逐步分析:<br>变量从i = 1开始自增，每一次循环就乘以2，等到大于等于n的时候，循环结束。<br>实际上，这就是我们高中的等比数列<br>i = 1<br>i = 2<br>i = 4<br>i = 8<br>…<br>i &gt;=n<br>所以我们只需要知道最大的值是多少就行了<br>也就是计算一个等式:2的x次方 = n<br>所以代码的时间复杂度就是O(log2 n);</p>
