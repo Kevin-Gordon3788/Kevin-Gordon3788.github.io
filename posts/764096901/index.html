@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="算法时间空间复杂度分析, 嵌入式软件 电控 MCU 物联网IOT">
+    <meta name="keywords" content="MicroChip IO端口使用以及程序段的定义, 嵌入式软件 电控 MCU 物联网IOT">
     <meta name="description" content="一个喜欢嵌入式的小工程师">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>算法时间空间复杂度分析 | MCU-Kevin个人博客</title>
+    <title>MicroChip IO端口使用以及程序段的定义 | MCU-Kevin个人博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">算法时间空间复杂度分析</h1>
+                    <h1 class="description center-align post-title">MicroChip IO端口使用以及程序段的定义</h1>
                 </div>
             </div>
         </div>
@@ -430,16 +430,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">
-                                <span class="chip bg-color">算法</span>
+                            <a href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/">
+                                <span class="chip bg-color">单片机</span>
                             </a>
                         
-                            <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
-                                <span class="chip bg-color">时间复杂度</span>
-                            </a>
-                        
-                            <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
-                                <span class="chip bg-color">空间复杂度</span>
+                            <a href="/tags/IO%E7%AB%AF%E5%8F%A3/">
+                                <span class="chip bg-color">IO端口</span>
                             </a>
                         
                     </div>
@@ -454,7 +450,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-05-05
+                    2020-06-30
                 </div>
                 
 
@@ -470,47 +466,51 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>数据结构和算法本质上来说是解决快和省的问题。快通常指的是速度快，省一般指的是空间省。<br>也就是说，如何让代码运行得更快，让代码更省空间，是算法主要解决的问题<br>因此今天就讲一下时间、空间复杂度分析</p>
-<h2 id="为什么需要复杂度分析"><a href="#为什么需要复杂度分析" class="headerlink" title="为什么需要复杂度分析"></a>为什么需要复杂度分析</h2><p>在做项目的时候，我们只需要把代码跑一遍，通过监控数据，或者看看示波器（看看IO的翻转），就能得到算法执行的时间和占用内存的大小了啊。难道有什么东西比实战更有效更准确吗？</p>
-<p>实际上，这种方法是可行的。但是这种统计方法具有非常大的局限性，只能反映出当前的数据是正确的，但是没办法反映永远都是正确的。</p>
-<h3 id="这种测试方法非常依赖于我们的测试环境"><a href="#这种测试方法非常依赖于我们的测试环境" class="headerlink" title="这种测试方法非常依赖于我们的测试环境"></a>这种测试方法非常依赖于我们的测试环境</h3><p>实际上，测试环境对这种方法影响极大。<br>比如我们写了一段插入排序的代码。我们用MCU（STM32/51）和CPU（Intel Core i9）来运行。<br>不用说，CPU肯定比MCU执行的速度要快很多。<br>而且放在不同的编译环境，编译器对它的优化也有一定的影响</p>
-<h3 id="这种测试方法对数据的大小非常敏感"><a href="#这种测试方法对数据的大小非常敏感" class="headerlink" title="这种测试方法对数据的大小非常敏感"></a>这种测试方法对数据的大小非常敏感</h3><p>同样的使用排序算法，比如从大到小那样排，如果排列的顺序不一样或者数据的长度不一样的话，排序的执行时间就会有很大的差别。比如我们在最好的情况下，我们这个排序不需要做任何操作，执行时间非常短。另外如果数据量比较小的话，不管这个排序数列是有序还是无序的，可能看起来都不一样。如果对于小规模的数列，插入排序可能比快排要快。</p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>实测确实能反映出当前的算法情况，但是它非常依赖于我们的测试环境和测试的数据。<br>思考一下，我们能不能不需要实测（实测需要大量的时间），就可以估算出算法的执行效率。<br>这就是今天要学习的时间、空间复杂度分析法</p>
-<h2 id="大O复杂度表示法"><a href="#大O复杂度表示法" class="headerlink" title="大O复杂度表示法"></a>大O复杂度表示法</h2><p>算法的执行效率，简单来说就是代码执行的时间。<br>那么我们怎么才能估算出一段代码的执行时间呢？<br>下面有段代码，求1 ~ n的累加：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int myCalculation(int n)</span><br><span class="line">&#123;</span><br><span class="line">    int sum = 0;</span><br><span class="line">    int i;</span><br><span class="line">    <span class="keyword">for</span>(i = 1;i &lt;= n;i++)&#123;</span><br><span class="line">        sum += i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>对于CPU而言，都是读内存数据 - 运算 - 写内存数据。<br>不同的编译环境下，每行代码执行的时间都是不一样的。假设每行代码执行的时间都是 1个周期，<br>那么 第2-3行执行的时间是 2个周期，第4-5行分别运行了n个周期，2行就是2n个周期，所以代码的总执行时间为2n + 2个周期。<br>由上可见，代码总执行时间和代码执行的次数有关</p>
-<p>再看看下面这段代码:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int myCalculation()</span><br><span class="line">&#123;</span><br><span class="line">    int sum = 0;</span><br><span class="line">    int i = 0;</span><br><span class="line">    int j = 0;</span><br><span class="line">    <span class="keyword">for</span>(i = 1;i&lt;=n;i++)&#123;</span><br><span class="line">        j = 1;</span><br><span class="line">        <span class="keyword">for</span>(;j&lt;=n;++j)&#123;</span><br><span class="line">            sum = sum + i * j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>继续分析：<br>1）2 ~ 4 行一共需要运行 3个周期的时间<br>2）5,6行一共需要2n个周期的时间<br>3）7,8行一共需要n<em>n个周期的时间<br>综上所述，整段代码的总运行时间为: 3 + 2n + n</em>n周期<br>由上可见，代码的总执行时间和代码执行次数成正比</p>
-<p>当我们把这个规律总结成公式，那就是我们的大O分析法出场的时候了<br>T(n) = O(f(n))<br>其中T(n)代表的是代码执行的时间，n代表的是我们数据大小（如代码执行的次数）<br>f(n)代表每行代码执行次数的总和。<br>O表示代码执行的时间和f(n)成正比</p>
-<p>总结上面两个例子，第一个例子中T(n) = O(2n + 2),第二个例子中T(n) = O(2n*n + 2n + 3)这就是大O时间复杂度表示法。<br>但是大O时间复杂度实际上并不能表示代码真正的执行时间，而是表示代码执行时间随着数据规模增长的变化趋势，简称时间复杂度<br>当这个n很大的时候。此时公式中其他的数据并不会影响到它增长的趋势的话，那么都可以忽略。我们只需要记录一个最大量级就可以了。<br>在这种情况下，第一个例子中就是T(n) = O(n),第二个例子中就是T(n) = O(n * n)</p>
-<h2 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h2><p>三种方法告诉你，怎么去分析一段代码的时间复杂度</p>
-<h3 id="只关注循环执行次数最多的一段代码"><a href="#只关注循环执行次数最多的一段代码" class="headerlink" title="只关注循环执行次数最多的一段代码"></a>只关注循环执行次数最多的一段代码</h3><p>大O这种复杂度表示方法只是表示一种变化趋势，我们一般忽略掉公式中的一些常量，只需要记录最大阶的量级就可以了。所以我们在分析一个算法的时间复杂度的时候，也只需要关注循环执行次数最大的那一段代码就可以了。这种核心代码执行次数的N的量级，就是整段要分析代码的时间复杂度</p>
-<p>拿例子1 来进行说明：<br>因为前面两句临时变量的定义都是常量级的执行时间，和N的大小无关，对复杂度没有影响。而循环执行次数最多的是4、5行代码。因为这两行代码被执行了N次，所以总的时间复杂度是O(n)</p>
-<h3 id="加法法则：总复杂度等于量级最大的那段代码的复杂度"><a href="#加法法则：总复杂度等于量级最大的那段代码的复杂度" class="headerlink" title="加法法则：总复杂度等于量级最大的那段代码的复杂度"></a>加法法则：总复杂度等于量级最大的那段代码的复杂度</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">int cal(int n) &#123;</span><br><span class="line">   int sum_1 = 0;</span><br><span class="line">   int p = 1;</span><br><span class="line">   <span class="keyword">for</span> (; p &lt; 100; ++p) &#123;</span><br><span class="line">     sum_1 = sum_1 + p;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   int sum_2 = 0;</span><br><span class="line">   int q = 1;</span><br><span class="line">   <span class="keyword">for</span> (; q &lt; n; ++q) &#123;</span><br><span class="line">     sum_2 = sum_2 + q;</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   int sum_3 = 0;</span><br><span class="line">   int i = 1;</span><br><span class="line">   int j = 1;</span><br><span class="line">   <span class="keyword">for</span> (; i &lt;= n; ++i) &#123;</span><br><span class="line">     j = 1; </span><br><span class="line">     <span class="keyword">for</span> (; j &lt;= n; ++j) &#123;</span><br><span class="line">       sum_3 = sum_3 +  i * j;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   <span class="built_in">return</span> sum_1 + sum_2 + sum_3;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="分析时间复杂度"><a href="#分析时间复杂度" class="headerlink" title="分析时间复杂度"></a>分析时间复杂度</h2><p>sum_1的代码循环执行了100次，所以是一个常量的执行时间，跟n的规模无关<br>sum_2时间复杂度是O(n)<br>sum_3时间复杂度是O(n<em>n)<br>综合上面三个代码的时间复杂度，我们取最大的量级。<br>所以整段代码的时间复杂度是O(n</em>n),也就是说，总的时间复杂度就等于量级最大的那段代码的时间复杂度。<br>设 T1(n) = O(f(n)),T2(n) = O(g(n)),<br>那么T(n) = T1(n) + T2(n) = max (O(f(n)),O(g(n)))</p>
-<h3 id="乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积"><a href="#乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积" class="headerlink" title="乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积"></a>乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积</h3><p>复杂度的乘法法则类似与加法法则那样<br>设 T1(n) = O(f(n)),T2(n) = O(g(n)),<br>那么T(n) = T1(n) * T2(n) = O(f(n)) * O(g(n))<br>同样的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">int cal(int n) &#123;</span><br><span class="line">   int ret = 0; </span><br><span class="line">   int i = 1;</span><br><span class="line">   <span class="keyword">for</span> (; i &lt; n; ++i) &#123;</span><br><span class="line">     ret = ret + f(i);</span><br><span class="line">   &#125; </span><br><span class="line"> &#125; </span><br><span class="line"> </span><br><span class="line"> int f(int n) &#123;</span><br><span class="line">  int sum = 0;</span><br><span class="line">  int i = 1;</span><br><span class="line">  <span class="keyword">for</span> (; i &lt; n; ++i) &#123;</span><br><span class="line">    sum = sum + i;</span><br><span class="line">  &#125; </span><br><span class="line">  <span class="built_in">return</span> sum;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p>整个函数的时间复杂度为：T(n) = O(n*n)</p>
-<h2 id="多项式时间复杂度"><a href="#多项式时间复杂度" class="headerlink" title="多项式时间复杂度"></a>多项式时间复杂度</h2><h3 id="O-1"><a href="#O-1" class="headerlink" title="O(1)"></a>O(1)</h3><p>O(1)不是代表我们只运行一次，它是常量级时间复杂度的一种表示方法<br>比如下面这段代码</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">int j = 0;</span><br><span class="line">int sum = i + j + 100 + 20;</span><br></pre></td></tr></table></figure>
-<p>它的时间复杂度是O(1)<br>只要代码的执行时间不会随着n的增大而增大，这样代码的时间复杂度我们都记作O(1)</p>
-<h3 id="O-logn-O-nlogn"><a href="#O-logn-O-nlogn" class="headerlink" title="O(logn)/O(nlogn)"></a>O(logn)/O(nlogn)</h3><p>对数阶时间复杂度非常常见，同时也是最难区别的一种时间复杂度<br>举个例子</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i = 1；</span><br><span class="line"><span class="keyword">while</span>(i &lt;= n)</span><br><span class="line">&#123;</span><br><span class="line">    i *= 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>根据上面说的复杂度方法，while循环执行的次数是最多的，所以我们要得到时间复杂度，我们只需要计算出这几行代码一共执行了多少次就可以了。</p>
-<p>逐步分析:<br>变量从i = 1开始自增，每一次循环就乘以2，等到大于等于n的时候，循环结束。<br>实际上，这就是我们高中的等比数列<br>i = 1<br>i = 2<br>i = 4<br>i = 8<br>…<br>i &gt;=n<br>所以我们只需要知道最大的值是多少就行了<br>也就是计算一个等式:2的x次方 = n<br>所以代码的时间复杂度就是O(log2 n);</p>
-<p>Next..</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i = 1；</span><br><span class="line"><span class="keyword">while</span>(i &lt;= n)</span><br><span class="line">&#123;</span><br><span class="line">    i *= 3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>代码的时间复杂度就是O(log3 n);<br>实际上，不管是以2为底还是以3为底，我们都可以把所有对数阶的时间复杂度都记为 O(logn)，why?</p>
-<p>我们知道，对数之间是可以互相转换的，log3 n就等于 log3 2 * log2 n,所以O(log3 n) = O(C *log3 n)。而C = log3 2，这是一个常量。基于我们前面的一个理论，在采用大O计算复杂度的时候，可以忽略该系数，也就是O(C(f(n))) = O(f(n))<br>所以，O(log2 n) = O(log3 n);因此我们统一表示为 O(logn)<br>因此如果一段代码的时间复杂度是O(log n)的话，如果它循环执行了n次，那么时间复杂度说就是n(logn)，比如归并排序，快速排序</p>
-<h3 id="O-m-n-O-m-n"><a href="#O-m-n-O-m-n" class="headerlink" title="O(m + n)/O(m*n)"></a>O(m + n)/O(m*n)</h3><p>我们再来讲一种和前面都不一样的时间复杂度，代码的复杂度由两个数据的规模来决定。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">int cal(int m, int n) &#123;</span><br><span class="line">  int sum_1 = 0;</span><br><span class="line">  int i = 1;</span><br><span class="line">  <span class="keyword">for</span> (; i &lt; m; ++i) &#123;</span><br><span class="line">    sum_1 = sum_1 + i;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  int sum_2 = 0;</span><br><span class="line">  int j = 1;</span><br><span class="line">  <span class="keyword">for</span> (; j &lt; n; ++j) &#123;</span><br><span class="line">    sum_2 = sum_2 + j;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">return</span> sum_1 + sum_2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从代码可以看出，m和n表示的是两个数据规模，我们没办法说m 和 n的差别是多少<br>所以我们不能抛弃m或者n，所以上面代码的时间复杂度是O(m + n)<br>这个时候加法法则的计算需要加点料了<br>T1(m) + T2(n) = O(f(m) + f(n))<br>乘法法则不变:<br>T1(m) * T2(n) = O(f(m) * f(n))</p>
-<h2 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h2><p>时间复杂度是渐进时间复杂度，表示算法的执行时间和数据规模之间的增长关系<br>类比一下，空间复杂度就是渐进空间复杂度，表示算法的存储空间与数据规模之间的增长关系</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void <span class="built_in">print</span>(int n) &#123;</span><br><span class="line">  int i = 0;</span><br><span class="line">  int[] a = new int[n];</span><br><span class="line">  <span class="keyword">for</span> (i; i &lt;n; ++i) &#123;</span><br><span class="line">    a[i] = i * i;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = n-1; i &gt;= 0; --i) &#123;</span><br><span class="line">    <span class="built_in">print</span> out a[i]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>根据空间复杂度分析，因为第三行申请了一个大小为n的int 类型的数组。除此之外，代码没有做任何关于空间的操作，所以代码的空间复杂度是O(n)</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>复杂度包括时间复杂度和空间复杂度，用于分析算法执行效率和数据规模之间的增长关系<br>可以认为，越高阶复杂度的算法，执行效率越低<br>从低阶-高阶：O(1) - O(log n) - O(n) - O(nlog n) - O(n * n)<br>复杂度分析分为以下几个方面：<br>1.单段代码计算时间复杂度 – 看最高频的<br>2.多段代码计算时间复杂度 – 看最大的一个复杂度（加法法则）<br>3.嵌套代码计算时间复杂度 – 求乘积 （乘法法则）<br>4.多种情况计算时间复杂度 – 复杂度相加/复杂度相乘</p>
+                <p>单片机程序的编写，离不开IO的使用，比如在调试的时候需要翻转IO来测试时钟，或者用IO来进行调试等等</p>
+<h1 id="IO端口的概念"><a href="#IO端口的概念" class="headerlink" title="IO端口的概念"></a>IO端口的概念</h1><h2 id="高阻态"><a href="#高阻态" class="headerlink" title="高阻态"></a>高阻态</h2><p>​    在单片机中，可能存在一些IO端口没有被使用的情况，这个时候IO不接高电平也不接低电平，也就是相当于端口处于悬空的状态，这个时候它的输入阻抗是很大的，消耗电流很小。我们称这种状态为高阻态</p>
+<p>​    一般在单片机复位后，引脚会默认配置为输入状态，如果有使用不到的引脚，会把它设置为输入。这样会减小一部分芯片功耗，在一定程序上也会增加芯片抗干扰能力</p>
+<h2 id="上拉-下拉"><a href="#上拉-下拉" class="headerlink" title="上拉/下拉"></a>上拉/下拉</h2><p>​    IO端口会处于悬空的状态，为了让端口具有确定的电平状态可能会在端口接一个电阻到VDD，我们称之为上拉。</p>
+<p>​    也有可能在端口接一个电阻到GND，我们称之为下拉。</p>
+<h2 id="漏极开路输出"><a href="#漏极开路输出" class="headerlink" title="漏极开路输出"></a>漏极开路输出</h2><p>​    把MOSFET的漏极没有任何链接的输入状态称为漏极开路输出。这种漏极开路特性允许通过使用外部上拉电阻，在所需的任意5V耐压引脚上产生高于VDD（如5V）的输出电压。</p>
+<p><img src="%E6%BC%8F%E6%9E%81%E5%BC%80%E8%B7%AF%E8%BE%93%E5%87%BA%E7%A4%BA%E4%BE%8B.png" alt=""></p>
+<h1 id="配置链接文件实现程序段的分配"><a href="#配置链接文件实现程序段的分配" class="headerlink" title="配置链接文件实现程序段的分配"></a>配置链接文件实现程序段的分配</h1><p>我们打开工程里面的p33E128MC506.gld</p>
+<p>假设我们需要为我们的程序配置段，我们需要做一下配置：</p>
+<ul>
+<li>在链接文件中定义段属性</li>
+</ul>
+<p>.led_section :<br>  {<br>        *(.led_section);<br>  } &gt;program</p>
+<ul>
+<li>定义段的声明的宏定义</li>
+</ul>
+<p>#define     LED_SECTION    <strong>attribute</strong>((section(“.led_section”)))</p>
+<ul>
+<li>函数使用宏定义来修饰</li>
+</ul>
+<p>void LED_SECTION LedOff(void)<br>{</p>
+<p>}</p>
+<h1 id="通过IO配置点亮LED灯"><a href="#通过IO配置点亮LED灯" class="headerlink" title="通过IO配置点亮LED灯"></a>通过IO配置点亮LED灯</h1><h2 id="原理图查询"><a href="#原理图查询" class="headerlink" title="原理图查询"></a>原理图查询</h2><p><img src="LED%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt=""></p>
+<p><img src="LED%E5%8E%9F%E7%90%86%E5%9B%BE1.png" alt=""></p>
+<h2 id="硬件分析"><a href="#硬件分析" class="headerlink" title="硬件分析"></a>硬件分析</h2><p>当MCU的IO把端口设置为0的时候，电路存在压差，LED亮，否则，LED灭</p>
+<p>电路存在向IO口灌电流的情况，但是IO的总灌电流的能力是有限的，需要控制灌电流的大小</p>
+<h1 id="软件编写"><a href="#软件编写" class="headerlink" title="软件编写"></a>软件编写</h1><p><img src="IO%E7%AB%AF%E5%8F%A3%E7%BB%93%E6%9E%84%E6%A1%86%E5%9B%BE.png" alt="I/O端口结构框图"></p>
+<ul>
+<li>引脚定义</li>
+</ul>
+<p>LED0 - RE12 </p>
+<p>LED1 - RE13 </p>
+<p>LED2 - RE14 </p>
+<p>LED3 - RE15</p>
+<ul>
+<li>代码编写</li>
+</ul>
+<p>初始化LED：</p>
+<p>#define TRISE_INIT      0x0fff<br>#define PORTE_INIT      0xf000<br>#define LATE_INIT       0xf000<br>#define ODCE_INIT       0x0000<br>#define CNENE_INIT      0x0000<br>#define CNPUE_INIT      0x0000<br>#define CNPDE_INIT      0x0000<br>#define ANSELE_INIT     0x0000</p>
+<p>TRISE = TRISE_INIT; //RE15 - RE12 作为输出功能<br>PORTE = PORTE_INIT;//初始化为高电平<br>LATE = LATE_INIT;//初始化为高电平<br>ODCE = ODCE_INIT; //不需要漏极开路输出<br>CNENE = CNENE_INIT;//不需要输入电平变化<br>CNPUE = CNPUE_INIT;//取消下拉<br>CNPDE = CNPDE_INIT;//取消上拉<br>ANSELE = ANSELE_INIT;//取消模拟输入</p>
+<p>点亮LED：</p>
+<p>先定义LED的端口</p>
+<p>#define     LED0_PIN    LATEbits.LATE12<br>#define     LED1_PIN    LATEbits.LATE13<br>#define     LED2_PIN    LATEbits.LATE14<br>#define     LED3_PIN    LATEbits.LATE15</p>
+<p>点亮LED：</p>
+<p>LED0_PIN = LED1_PIN  = LED2_PIN = LED3_PIN  = 0；</p>
 
             </div>
             <hr/>
@@ -536,7 +536,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://KevinGordonMCU.top/posts/4079050735/">http://KevinGordonMCU.top/posts/4079050735/</a>
+                    <a href="http://KevinGordonMCU.top/posts/764096901/">http://KevinGordonMCU.top/posts/764096901/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -574,16 +574,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E7%AE%97%E6%B3%95/">
-                                    <span class="chip bg-color">算法</span>
+                                <a href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/">
+                                    <span class="chip bg-color">单片机</span>
                                 </a>
                             
-                                <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
-                                    <span class="chip bg-color">时间复杂度</span>
-                                </a>
-                            
-                                <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
-                                    <span class="chip bg-color">空间复杂度</span>
+                                <a href="/tags/IO%E7%AB%AF%E5%8F%A3/">
+                                    <span class="chip bg-color">IO端口</span>
                                 </a>
                             
                         </div>
@@ -629,6 +625,59 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
+                <a href="/posts/3413069295/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Microchip-按键输入">
+                        
+                        <span class="card-title">Microchip-按键输入</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            对于单片机来说，按键也是一种比较重要的人机交互方式，我们通过代码来让按键控制我们的LED
+硬件原理图如图可知，当没按下去的时候，MCU端口识别为高电平，当按下了，MCU端口识别为低电平，其中按键为RC1 RC2 RC11
+代码编写
+
+#de
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-01
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Kevin Gordon
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/">
+                        <span class="chip bg-color">单片机</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%8C%89%E9%94%AE%E8%BE%93%E5%85%A5/">
+                        <span class="chip bg-color">按键输入</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
                 <a href="/posts/278301289/">
                     <div class="card-image">
                         
@@ -647,45 +696,8 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-06-27
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            Kevin Gordon
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/posts/4278564287/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="第一篇博客">
-                        
-                        <span class="card-title">第一篇博客</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-27
                             </span>
                         <span class="publish-author">
                             
@@ -694,18 +706,6 @@
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/STM32/">
-                        <span class="chip bg-color">STM32</span>
-                    </a>
-                    
-                    <a href="/tags/STM32CUBEMX/">
-                        <span class="chip bg-color">STM32CUBEMX</span>
-                    </a>
-                    
                 </div>
                 
             </div>
